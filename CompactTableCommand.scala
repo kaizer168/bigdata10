@@ -12,11 +12,13 @@ case class CompactTableCommand(
 //To-do
     val catalog = sparkSession.sessionState.catalog
     val targetTable = catalog.getTableMetadata(table)
+  if (partition.isDefined) {
     df.repartition(fileNum, $"key", rand)
       .write
       .option("header", "true")
       .partitionBy("key")
       .csv("/path/partitioned")
+  }
 //To-do
     Seq.empty[Row]
   }
