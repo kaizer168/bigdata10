@@ -2,8 +2,6 @@ package org.apache.spark.sql.execution.command
 
 import org.apache.spark.sql.{Row, SparkSession}
 import org.apache.spark.sql.catalyst.expressions.{Attribute, AttributeReference}
-import org.apache.spark.sql.types.StringType
-import org.apache.spark.sql.functions.rand
 
 case class CompactTableCommand(
   table: tableIdentifier,
@@ -13,7 +11,7 @@ case class CompactTableCommand(
     val catalog = sparkSession.sessionState.catalog
     val targetTable = catalog.getTableMetadata(table)
   if (partition.isDefined) {
-    df.repartition(fileNum, $"key", rand)
+    df.repartition(fileNum)
       .write
       .option("header", "true")
       .partitionBy("key")
